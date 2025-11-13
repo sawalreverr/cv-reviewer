@@ -24,8 +24,8 @@ type EvaluationJob struct {
 	ProjectReportID uuid.UUID `gorm:"type:uuid;not null" json:"project_report_id"`
 	Status JobStatus `gorm:"type:text;not null;index" json:"status"`
 	ErrorMessage *string `gorm:"type:text;default:null" json:"error_message,omitempty"` // optional, bisa nil
-	StartedAt *time.Time `gorm:"type:timestampz;default:null" json:"started_at,omitempty"` // optional, bisa nil
-	CompletedAt *time.Time `gorm:"type:timestampz;default:null" json:"completed_at,omitempty"` // optional, bisa nil
+	StartedAt *time.Time `gorm:"type:timestamptz;default:null" json:"started_at,omitempty"` // optional, bisa nil
+	CompletedAt *time.Time `gorm:"type:timestamptz;default:null" json:"completed_at,omitempty"` // optional, bisa nil
 	CreatedAt time.Time `gorm:"autoCreateTime" json:"-"`
 	UpdatedAt time.Time `gorm:"autoUpdateTime" json:"-"`
 }
