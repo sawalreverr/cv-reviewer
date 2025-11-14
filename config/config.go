@@ -1,11 +1,16 @@
 package config
 
-import "github.com/spf13/viper"
+import (
+	"strconv"
+
+	"github.com/spf13/viper"
+)
 
 type Config struct {
     Server   ServerConfig
     Database DatabaseConfig
     Storage  StorageConfig
+    Gemini GeminiConfig
 }
 
 type ServerConfig struct {
@@ -23,6 +28,15 @@ type DatabaseConfig struct {
 
 type StorageConfig struct {
     UploadDir string
+}
+
+type GeminiConfig struct {
+    APIKey string
+    Model string
+    EmbeddingModel string
+    Temperature float32
+    MaxTokens int32
+    Dimension *int32
 }
 
 func Load() (*Config, error) {
@@ -48,7 +62,24 @@ func Load() (*Config, error) {
         Storage: StorageConfig{
             UploadDir: viper.GetString("UPLOAD_DIR"),
         },
+        Gemini: GeminiConfig{
+            APIKey: viper.GetString("GEMINI_APIKEY"),
+            Model: viper.GetString("GEMINI_MODEL"),
+            EmbeddingModel: viper.GetString("GEMINI_EMBEDDING_MODEL"),
+            Temperature: float32(viper.GetFloat64("GEMINI_TEMPERATURE")),
+			MaxTokens: viper.GetInt32("GEMINI_MAX_TOKENS"),
+            Dimension: parseDimensionPtr(),
+        },
     }
     
     return config, nil
+}
+
+func parseDimensionPtr() *int32 {
+    dimension := viper.GetString("GEMINI_DIMENSION")
+
+    val, _ := strconv.Atoi(dimension)
+    val32 := int32(val)
+
+    return &val32
 }
