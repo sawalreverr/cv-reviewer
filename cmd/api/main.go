@@ -54,6 +54,8 @@ func main() {
 	// routes
 	e.GET("/health", healthHandler.Check)
 	e.POST("/upload", documentHandler.Upload)
+
+	// testing routes
 	e.GET("/documents/:id", documentHandler.GetDocument)
 	
 	log.Printf("server starting on port %s", cfg.Server.Port)
