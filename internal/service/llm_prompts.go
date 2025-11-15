@@ -20,12 +20,6 @@ CV SCORING RUBRIC:
 CANDIDATE CV:
 %s
 
-EVALUATION CRITERIA (1-5 scale):
-1. Technical skills match (weight 40%%)
-2. Experience level (weight 25%%)
-3. Relevant achievements (weight 20%%)
-4. Cultural fit (weight 15%%)
-
 REQUIRED OUTPUT (JSON format):
 {
   "cv_match_rate": <0.00-1.00>,
@@ -55,13 +49,6 @@ PROJECT SCORING RUBRIC:
 
 PROJECT REPORT:
 %s
-
-EVALUATION CRITERIA (1-5 scale):
-1. Correctness (weight 30%%):
-2. Code Quality (weight 25%%)
-3. Resilience (weight 20%%)
-4. Documentation (weight 15%%)
-5. Creativity (weight 10%%)
 
 REQUIRED OUTPUT (JSON format):
 {
