@@ -21,7 +21,7 @@ func NewDocumentHandler(uc usecase.DocumentUsecase) *DocumentHandler {
 
 type UploadResponse struct {
 	CVID *uuid.UUID `json:"cv_id,omitempty"`
-	ReportID *uuid.UUID `json:"report_id,omitempty"`
+	ReportID *uuid.UUID `json:"project_report_id,omitempty"`
 }
 
 func (h *DocumentHandler) Upload(c echo.Context) error {
@@ -37,9 +37,9 @@ func (h *DocumentHandler) Upload(c echo.Context) error {
 		return response.Error(c, http.StatusBadRequest, "cv file required", nil)
 	}
 
-	reportFile := form.File["report"]
+	reportFile := form.File["project_report"]
 	if len(reportFile) == 0 {
-		return response.Error(c, http.StatusBadRequest, "report file required", nil)
+		return response.Error(c, http.StatusBadRequest, "project_report file required", nil)
 	}
 
 	cvDoc, err := h.usecase.UploadDocument(ctx, cvFile[0], domain.CV)
