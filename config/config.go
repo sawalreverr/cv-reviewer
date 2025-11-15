@@ -11,6 +11,7 @@ type Config struct {
     Database DatabaseConfig
     Storage  StorageConfig
     Gemini GeminiConfig
+    Queue QueueConfig
 }
 
 type ServerConfig struct {
@@ -37,6 +38,12 @@ type GeminiConfig struct {
     Temperature float32
     MaxTokens int32
     Dimension *int32
+}
+
+type QueueConfig struct {
+    WorkerCount int
+    QueueSize int
+    JobTimeout int
 }
 
 func Load() (*Config, error) {
@@ -69,6 +76,11 @@ func Load() (*Config, error) {
             Temperature: float32(viper.GetFloat64("GEMINI_TEMPERATURE")),
 			MaxTokens: viper.GetInt32("GEMINI_MAX_TOKENS"),
             Dimension: parseDimensionPtr(),
+        },
+        Queue: QueueConfig {
+        	WorkerCount: viper.GetInt("WORKER_COUNT"),
+        	QueueSize: viper.GetInt("JOB_QUEUE_SIZE"),
+        	JobTimeout: viper.GetInt("JOB_TIMEOUT"),
         },
     }
     

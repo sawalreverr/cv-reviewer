@@ -19,6 +19,8 @@ var (
 	ErrJobNotFound = errors.New("evaluation job not found")
 	ErrJobFailed = errors.New("evaluation job failed")
 	ErrJobTimeout = errors.New("evaluation job timeout")
+
+	ErrQueueFull = errors.New("job queue is full")	
 )
 
 type AppError struct {
