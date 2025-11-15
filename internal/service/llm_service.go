@@ -20,6 +20,10 @@ type ProjectEvaluation struct {
 	ProjectFeedback string `json:"project_feedback"`
 }
 
+type FinalSummary struct {
+	OveralSummary string `json:"overall_summary"`
+}
+
 type LLMService interface {
 	EvaluateCV(ctx context.Context, cvText string, jobDescContext, rubricContext []string) (*CVEvaluation, error)
 	EvaluateProject(ctx context.Context, projectText string, caseStudyContext, rubricContext []string) (*ProjectEvaluation, error)
@@ -98,7 +102,13 @@ func (s *llmService) FinalSummary(ctx context.Context, cvEval *CVEvaluation, pro
 		return "", fmt.Errorf("failed to generate final summary: %w", err)
 	} 
 
-	return strings.TrimSpace(response), nil
+	var summary FinalSummary
+	cleanedResponse := s.cleanJSONResponse(response)
+	if err := json.Unmarshal([]byte(cleanedResponse), &summary); err != nil {
+		return "", fmt.Errorf("failed to parse finaly summary: %w (response: %s)", err, cleanedResponse)
+	}
+
+	return strings.TrimSpace(summary.OveralSummary), nil
 }
 
 func (s *llmService) generateContent(ctx context.Context, prompt string) (string, error) {
