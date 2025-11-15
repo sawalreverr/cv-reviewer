@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/sawalreverr/cv-reviewer/config"
 	"google.golang.org/genai"
@@ -112,8 +113,23 @@ func (s *llmService) FinalSummary(ctx context.Context, cvEval *CVEvaluation, pro
 }
 
 func (s *llmService) generateContent(ctx context.Context, prompt string) (string, error) {
-	response, err := s.client.Models.GenerateContent(ctx, s.model, genai.Text(prompt), &genai.GenerateContentConfig{Temperature: &s.temperature, MaxOutputTokens: s.maxTokens})
+	// add 2 minute timeout for llm api call
+	ctxTimeout, cancel := context.WithTimeout(ctx, 120*time.Second)
+	defer cancel()
+
+	response, err := s.client.Models.GenerateContent(
+		ctxTimeout,
+		s.model,
+		genai.Text(prompt),
+		&genai.GenerateContentConfig{
+			Temperature: &s.temperature,
+			MaxOutputTokens: s.maxTokens,
+		},
+	)
 	if err != nil {
+		if ctxTimeout.Err() == context.DeadlineExceeded {
+			return "", fmt.Errorf("llm api timeout after 120s")
+		}
 		return "", err
 	}
 
