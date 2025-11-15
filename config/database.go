@@ -6,7 +6,6 @@ import (
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"gorm.io/gorm/logger"
 )
 
 func NewDatabase(cfg *DatabaseConfig) (*gorm.DB, error) {
@@ -20,7 +19,7 @@ func NewDatabase(cfg *DatabaseConfig) (*gorm.DB, error) {
 		cfg.SSLMode,
 	)
 
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{Logger: logger.Default.LogMode(logger.Info)})
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		return nil, fmt.Errorf("failed to connect to database: %w", err)
 	}
@@ -34,7 +33,7 @@ func NewDatabase(cfg *DatabaseConfig) (*gorm.DB, error) {
 		return nil, fmt.Errorf("failed to ping database: %w", err)
 	}
 
-	log.Println("successfully connected to database: ", cfg.DBName)
+	log.Println("successfully connected to database:", cfg.DBName)
 
 	return db, nil
 }

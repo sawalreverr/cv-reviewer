@@ -6,7 +6,6 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/sawalreverr/cv-reviewer/config"
-	"github.com/sawalreverr/cv-reviewer/internal/domain"
 	"github.com/sawalreverr/cv-reviewer/internal/handler"
 	"github.com/sawalreverr/cv-reviewer/internal/repository"
 	"github.com/sawalreverr/cv-reviewer/internal/usecase"
@@ -25,14 +24,8 @@ func main() {
 		log.Fatalf("failed to connect to database: %v", err)
 	}
 	
-	entities := []interface{}{
-		&domain.Document{},
-		&domain.EvaluationJob{},
-		&domain.EvaluationResult{},
-	}
-
-	// auto migrate tables
-	if err := db.AutoMigrate(entities...); err != nil {
+	// run migrations
+	if err := config.RunMigration(db); err != nil {
 		log.Fatalf("failed to run migrations: %v", err)
 	}
 
@@ -54,9 +47,6 @@ func main() {
 	// routes
 	e.GET("/health", healthHandler.Check)
 	e.POST("/upload", documentHandler.Upload)
-
-	// testing routes
-	e.GET("/documents/:id", documentHandler.GetDocument)
 	
 	log.Printf("server starting on port %s", cfg.Server.Port)
 	if err := e.Start(":" + cfg.Server.Port); err != nil {
