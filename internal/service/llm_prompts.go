@@ -39,6 +39,9 @@ func (s *llmService) ProjectEvaluationPrompt(projectText string, caseStudyContex
 	prompt := fmt.Sprintf(`
 You are a senior backend engineer reviewing a technical case study submission.
 
+IMPORTANT: This case study may be implemented in ANY backend technology stack (Node.js, Golang, Python, etc.). 
+Evaluate based on FUNCTIONALITY and QUALITY, not specific technology choices.
+
 TASK: Evaluate the candidate Project Report against the case study brief and scoring rubric.
 
 CASE STUDY BRIEF:
